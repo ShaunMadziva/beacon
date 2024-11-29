@@ -126,7 +126,7 @@ const AIChatbot = () => {
 
       const openai = new OpenAI({
         apiKey:
-          "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",
+          "",
         dangerouslyAllowBrowser: true,
       });
 
