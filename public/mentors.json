@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Alex Carter",
+        "sector": "Technology (Software Development)",
+        "expertise": [
+            "Full-Stack Development",
+            "Cloud Computing"
+        ],
+        "role": "Senior Software Engineer at a Fortune 500 company, with over a decade of experience building scalable web applications and mentoring junior developers."
+    },
+    {
+        "name": "Priya Malhotra",
+        "sector": "Finance & Banking",
+        "expertise": [
+            "Financial Analysis",
+            "Risk Management"
+        ],
+        "role": "Investment Manager at a leading bank, specializing in portfolio management and sustainable investment strategies."
+    },
+    {
+        "name": "Sarah Johnson",
+        "sector": "Healthcare",
+        "expertise": [
+            "Healthcare IT",
+            "Telemedicine"
+        ],
+        "role": "Digital Health Consultant, supporting healthcare startups in implementing innovative telemedicine solutions."
+    },
+    {
+        "name": "Miguel Torres",
+        "sector": "Education",
+        "expertise": [
+            "EdTech",
+            "Curriculum Design"
+        ],
+        "role": "Founder of an EdTech startup that develops AI-driven personalized learning platforms for schools and universities."
+    },
+    {
+        "name": "Emma Zhang",
+        "sector": "E-Commerce",
+        "expertise": [
+            "Digital Marketing",
+            "Customer Analytics"
+        ],
+        "role": "Head of Marketing for a fast-growing online retail platform, focusing on SEO, SEM, and user engagement strategies."
+    },
+    {
+        "name": "James O'Neill",
+        "sector": "Manufacturing",
+        "expertise": [
+            "Lean Manufacturing",
+            "Supply Chain Optimization"
+        ],
+        "role": "Operations Manager at a global manufacturing firm, known for implementing cost-effective production processes."
+    },
+    {
+        "name": "Amina Yusuf",
+        "sector": "Non-Profit & Social Enterprises",
+        "expertise": [
+            "Fundraising",
+            "Community Engagement"
+        ],
+        "role": "Director of a non-profit organization dedicated to providing educational resources to underserved communities."
+    },
+    {
+        "name": "Hiroshi Tanaka",
+        "sector": "Energy & Environment",
+        "expertise": [
+            "Renewable Energy",
+            "Policy Advocacy"
+        ],
+        "role": "Consultant for sustainable energy projects, advising on solar and wind energy integration."
+    },
+    {
+        "name": "Isabella Rossi",
+        "sector": "Fashion & Retail",
+        "expertise": [
+            "Brand Strategy",
+            "Ethical Fashion"
+        ],
+        "role": "Creative Director of an ethical fashion brand, focusing on sustainable production and global market expansion."
+    },
+    {
+        "name": "Marcus Brown",
+        "sector": "Media & Entertainment",
+        "expertise": [
+            "Content Creation",
+            "Film Production"
+        ],
+        "role": "Independent film producer and mentor for aspiring filmmakers, with a focus on storytelling and distribution."
+    }
+]
