@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #ffffff;
-  .serif-text {
-    font-family: var(--font-noto-serif), serif;
-  }
-  .sans-display-text {
-    font-family: var(--font-noto-sans-display), sans-serif;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
   .serif-text {
     font-family: var(--font-noto-serif), serif;
   }
