@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-  .serif-text {
+  /* .serif-text {
     font-family: var(--font-noto-serif), serif;
   }
   .sans-display-text {
     font-family: var(--font-noto-sans-display), sans-serif;
   }
-}
+} */
