@@ -1,5 +1,7 @@
 "use client";
+
 import { useState } from "react";
+import OpenAI from "openai";
 
 const MentorsList = [
   {
@@ -64,7 +66,7 @@ const MentorsList = [
   },
 ];
 
-const AIChatbot = ({ onComplete }) => {
+const AIChatbot = () => {
   const [step, setStep] = useState(0);
   const [responses, setResponses] = useState({
     buildSkills: "",
@@ -74,7 +76,7 @@ const AIChatbot = ({ onComplete }) => {
     emphasis2: "",
   });
   const [botResponse, setBotResponse] = useState("");
-  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const questions = [
     "What skills are you looking to build?",
@@ -84,89 +86,96 @@ const AIChatbot = ({ onComplete }) => {
     "What is the second area of emphasis?",
   ];
 
-  const handleUserInput = async (inputValue) => {
-    // Save the user's input for the current step
+  const handleUserInput = async (input) => {
     const newResponses = { ...responses };
-    if (step === 0) newResponses.buildSkills = inputValue;
-    if (step === 1) newResponses.sector = inputValue;
-    if (step === 2) newResponses.profile = inputValue;
-    if (step === 3) newResponses.emphasis1 = inputValue;
-    if (step === 4) newResponses.emphasis2 = inputValue;
+    if (step === 0) newResponses.buildSkills = input;
+    if (step === 1) newResponses.sector = input;
+    if (step === 2) newResponses.profile = input;
+    if (step === 3) newResponses.emphasis1 = input;
+    if (step === 4) newResponses.emphasis2 = input;
 
     setResponses(newResponses);
-    console.log("!!!!!", newResponses);
-    setInput(""); // Clear input after each prompt
 
     if (step < questions.length - 1) {
       setStep(step + 1);
     } else {
-      // Generate the prompt and call the AI API
-      const aiPrompt = `
-        We have an individual looking for a mentor for help to ${newResponses.buildSkills} in the ${newResponses.sector} sector.
-        The person has a profile of ${newResponses.profile}.
-        From ${MentorsList}, please return the top three options for the individual, with an emphasis on ${newResponses.emphasis1} and ${newResponses.emphasis2}.
-        Please return the name, sector, role and reason for each mentor. Do not return any other information or text.
-      `;
+      // Final step: Call OpenAI API
+      setIsLoading(true);
+      const aiPrompt =
+        "We have an individual looking for a mentor for help to " +
+        newResponses.buildSkills +
+        " in the " +
+        newResponses.sector +
+        " sector.\n" +
+        "The person has a profile of " +
+        newResponses.profile +
+        ".\n" +
+        "From the following list of mentors, please return the top three options for the individual, with an emphasis on " +
+        newResponses.emphasis1 +
+        " and " +
+        newResponses.emphasis2 +
+        ".\n" +
+        "Mentor List:\n" +
+        JSON.stringify(MentorsList, null, 2) +
+        "\n" +
+        "Please return the name, sector, role and reason for each mentor. Do not return any other information or text.";
 
-      const response = await fetch("/api/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userMessages: [{ role: "user", content: aiPrompt }],
-        }),
+      console.log("!!!!!#", newResponses);
+
+      console.log("!!!!!", aiPrompt);
+
+      const openai = new OpenAI({
+        apiKey:
+          "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",
+        dangerouslyAllowBrowser: true,
       });
 
-      const data = await response.json();
-      console.log("*******", data);
-      setBotResponse(data.response);
-      onComplete(data.response); // Pass the AI response back to the parent component
+      try {
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [{ role: "user", content: aiPrompt }],
+        });
+        console.log("$$$$$$", completion);
+        setBotResponse(
+          completion.choices[0]?.message?.content || "No response received."
+        );
+      } catch (error) {
+        setBotResponse("Error connecting to OpenAI API. Please try again.");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-teal-400 via-blue-500 to-purple-600 flex items-center justify-center px-4">
-      <div className="bg-white shadow-xl rounded-3xl w-full max-w-3xl p-8">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-500 via-pink-500 to-red-500">
+      <div className="w-full max-w-lg bg-white shadow-2xl rounded-xl p-8">
         {botResponse ? (
           <div>
-            <h2 className="text-4xl font-bold mb-6 text-gray-800 text-center">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
               Suggested Mentors
             </h2>
-            <pre className="bg-gray-100 p-6 rounded-lg text-gray-700 text-lg whitespace-pre-line">
+            <pre className="bg-gray-100 p-4 rounded-lg text-gray-700 whitespace-pre-wrap">
               {botResponse}
             </pre>
-            <button
-              className="mt-6 w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 focus:ring-4 focus:ring-purple-400 focus:ring-opacity-50 text-lg font-semibold"
-              onClick={() => {
-                setStep(0);
-                setBotResponse("");
-              }}
-            >
-              Restart Chat
-            </button>
           </div>
         ) : (
-          <div className="flex flex-col items-center">
-            <p className="text-2xl font-semibold text-gray-800 text-center mb-6">
+          <div className="text-center">
+            <p className="text-xl font-medium mb-6 text-gray-700">
               {questions[step]}
             </p>
             <input
-              className="w-full p-4 border border-gray-300 rounded-lg shadow-md text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-300 text-gray-700"
               type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && input.trim() !== "") {
-                  handleUserInput(input);
-                }
-              }}
+              onBlur={(e) => handleUserInput(e.target.value)}
               placeholder="Type your answer here..."
             />
-            <button
-              onClick={() => input.trim() !== "" && handleUserInput(input)}
-              className="mt-2 w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-bold hover:bg-blue-700 focus:ring-4 focus:ring-blue-400 focus:ring-opacity-50"
-            >
-              Submit
-            </button>
+          </div>
+        )}
+        {isLoading && (
+          <div className="mt-6 text-purple-600 text-center animate-bounce">
+            Generating your results...
           </div>
         )}
       </div>
